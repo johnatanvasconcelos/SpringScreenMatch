@@ -6,14 +6,8 @@ import br.com.johnatan.screematch.model.DataSeries;
 import br.com.johnatan.screematch.model.Episode;
 import br.com.johnatan.screematch.service.ConvertData;
 import br.com.johnatan.screematch.service.OmdbAPIClient;
-import org.springframework.cglib.core.Local;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -44,38 +38,52 @@ public class Main {
 		}
 		seasons.forEach(System.out::println);
 
-//        for (int i = 0; i < dataSeries.totalSeasons(); i++) {
-//            List<DataEpisode> episodesForSeason = seasons.get(i).episodes();
-//            for (int j = 0; j < episodesForSeason.size(); j++) {
-//                System.out.println(episodesForSeason.get(j).title());
-//            }
-//        }
-//
-//        seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
+        for (int i = 0; i < dataSeries.totalSeasons(); i++) {
+            List<DataEpisode> episodesForSeason = seasons.get(i).episodes();
+            for (int j = 0; j < episodesForSeason.size(); j++) {
+                System.out.println(episodesForSeason.get(j).title());
+            }
+        }
+
+        seasons.forEach(s -> s.episodes().forEach(e -> System.out.println(e.title())));
 
         List<DataEpisode> dataOfEpisodes = seasons.stream()
                 .flatMap(s -> s.episodes().stream())
                         .toList();
 
-        System.out.println("\nTop 10 episódios da série " + dataSeries.title() + "\n");
-        dataOfEpisodes.stream()
-                .filter(e -> !e.rating().equalsIgnoreCase("N/A"))
-                .peek(e -> System.out.println("Primeiro filtro (N/A) " + e))
-                .sorted(Comparator.comparing(DataEpisode::rating).reversed())
-                .peek(e -> System.out.println("Ordenação " + e))
-                .limit(10)
-                .peek(e -> System.out.println("Limite " + e))
-                .map(e -> e.title().toUpperCase().concat(" - " + e.rating()))
-                .peek(e -> System.out.println("Mapeamento " + e))
-                .forEach(System.out::println);
+//        System.out.println("\nTop 10 episódios da série " + dataSeries.title() + "\n");
+//        dataOfEpisodes.stream()
+//                .filter(e -> !e.rating().equalsIgnoreCase("N/A"))
+//                .peek(e -> System.out.println("Primeiro filtro (N/A) " + e))
+//                .sorted(Comparator.comparing(DataEpisode::rating).reversed())
+//                .peek(e -> System.out.println("Ordenação " + e))
+//                .limit(10)
+//                .peek(e -> System.out.println("Limite " + e))
+//                .map(e -> e.title().toUpperCase().concat(" - " + e.rating()))
+//                .peek(e -> System.out.println("Mapeamento " + e))
+//                .forEach(System.out::println);
+//
+//        System.out.println("\n-------------------------------\n");
 
-        System.out.println("\n-------------------------------\n");
+        List<Episode> episodes = seasons.stream()
+                .flatMap(s -> s.episodes().stream()
+                        .map(d -> new Episode(s.number(),d))
+                ).toList();
 
-//        List<Episode> episodes = seasons.stream()
-//                .flatMap(s -> s.episodes().stream()
-//                        .map(d -> new Episode(s.number(),d))
-//                ).toList();
 //        episodes.forEach(System.out::println);
+//
+//        System.out.println("Digite o nome do episódio: ");
+//        var titleExcerpt = scanner.nextLine();
+//
+//        Optional<Episode> episodeSearched = episodes.stream()
+//                .filter(e -> e.getTitle().toLowerCase().contains(titleExcerpt.toLowerCase()))
+//                .findFirst();
+//        if(episodeSearched.isPresent()){
+//            System.out.println("Episódio encontrado: " + episodeSearched.get());
+//            System.out.println("Temporada: " + episodeSearched.get().getSeason());
+//        }else{
+//            System.out.println("Episódio não encontrado.");
+//        }
 //
 //        System.out.println("A partir de que ano você deseja ver os episódios? ");
 //        var year = scanner.nextInt();
@@ -93,6 +101,26 @@ public class Main {
 //                                "\nNota: " + e.getRating() +
 //                                "\nData de lançamento: " + e.getReleaseDate().format(formatter)
 //                ));
+
+        Map<Integer, String> ratingsPerSeason = episodes.stream()
+                .filter(e -> e.getRating() > 0.0)
+                .collect(Collectors.groupingBy(
+                        Episode::getSeason,
+                        Collectors.collectingAndThen(
+                                Collectors.averagingDouble(Episode::getRating),
+                                avg -> String.format("%.2f", avg)
+                )
+                ));
+
+        System.out.println(ratingsPerSeason);
+
+        DoubleSummaryStatistics est = episodes.stream()
+                .filter(e -> e.getRating() > 0.0)
+                .collect(Collectors.summarizingDouble(Episode::getRating));
+        System.out.println("Média: " + String.format("%.2f",est.getAverage()) );
+        System.out.println("Melhor episódio: " + est.getMax());
+        System.out.println("Pior episódio: " + est.getMin());
+        System.out.println("Quantidade de episódios avaliados: " + est.getCount());
     }
 
 }
