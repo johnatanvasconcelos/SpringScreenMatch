@@ -1,9 +1,11 @@
-package br.com.johnatan.screematch.service;
+package br.com.johnatan.screematch.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 
-public class ConvertData implements IConvertData{
+@Component
+public class ConvertData implements IConvertData {
     private ObjectMapper mapper = new ObjectMapper();
 
 
