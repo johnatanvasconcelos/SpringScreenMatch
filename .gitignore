@@ -33,4 +33,5 @@ build/
 .vscode/
 
 ### API_KEY ###
-api.key
+
+.api.key

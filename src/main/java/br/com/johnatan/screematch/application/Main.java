@@ -136,27 +136,6 @@ public class Main {
 //        System.out.println("\nMédia dos episódios: " + String.format("%.2f",est.getAverage()) );
 //        System.out.println("Quantidade de episódios avaliados: " + est.getCount());
 //
-//        episodes.stream()
-//                        .filter(e -> e.getRating() > 0.0)
-//                        .max(Comparator.comparingDouble(Episode::getRating))
-//                        .ifPresent(e ->
-//                                System.out.println(
-//                                        "Melhor episódio: "
-//                                                + e.getTitle()
-//                                                + " - Nota: "
-//                                                + e.getRating()
-//                                ));
-//
-//        episodes.stream()
-//                .filter(e -> e.getRating() > 0.0)
-//                .min(Comparator.comparingDouble(Episode::getRating))
-//                .ifPresent(e ->
-//                        System.out.println(
-//                                "Pior episódio: "
-//                                        + e.getTitle()
-//                                        + " - Nota: "
-//                                        + e.getRating()
-//                        ));
 
    }
 }
