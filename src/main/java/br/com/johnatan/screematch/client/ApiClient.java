@@ -1,6 +1,6 @@
 package br.com.johnatan.screematch.client;
 
-import br.com.johnatan.screematch.utils.ApiKeyReader;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,14 +11,8 @@ import java.net.http.HttpResponse;
 
 @Component
 public class ApiClient {
-    private final String apiKey;
-
-    public ApiClient() {
-        this.apiKey = ApiKeyReader.getApiKey();
-        if (this.apiKey == null) {
-            throw new RuntimeException("API key not found.");
-        }
-    }
+    @Value("${omdb.api.key}")
+    private String apiKey;
 
     public String getDataFromAPI(String apiUrl) {
         var newUrl = apiUrl + "&apikey=" + apiKey;
