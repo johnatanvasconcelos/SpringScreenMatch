@@ -11,9 +11,9 @@
 
 ## Índice
 
-*   [Funcionalidades](#funcionalidades-)
-*   [Tecnologias Utilizadas](#tecnologias-utilizadas-)
-*   [Pr-requisitos](#pré-requisitos-)
+*   [Funcionalidades](#funcionalidades)
+*   [Tecnologias Utilizadas](#tecnologias-utilizadas)
+*   [Pré-requisitos](#pré-requisitos-)
 *   [Como Começar](#como-começar-)
     *   [Clonando o Repositório](#clonando-o-repositório)
     *   [Configurando a API Key](#configurando-a-api-key-)
